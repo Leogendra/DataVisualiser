@@ -1,4 +1,3 @@
-from collections import defaultdict
 from datetime import datetime
 import csv, json, os, re
 
@@ -99,15 +98,21 @@ def parse_habits(file_path):
     csv_lines = csv_content.strip().split("\n")
     reader = csv.DictReader(csv_lines)
 
-    habits = defaultdict(list)
+    habits = {}
     for row in reader:
         date = row['Date']
         for key, value in row.items():
             if key != 'Date':
                 if value == '2':
-                    habits[key].append(date)
+                    if key in habits:
+                        habits[key].append(date)
+                    else:
+                        habits[key] = [date]
                 elif value == '3':
-                    habits[key+'_skip'].append(date)
+                    if key+'_skip' in habits:
+                        habits[key+'_skip'].append(date)
+                    else:
+                        habits[key+'_skip'] = [date]
 
     return habits
 
