@@ -1,0 +1,48 @@
+.header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background-color: #f9f9f9;
+    padding: 10px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.data-choices {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding: 0 10px;
+}
+
+.choice {
+    display: flex;
+    align-items: center;
+}
+
+.choice input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.choice label {
+    margin: 0;
+}
+
+.div-buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.refresh-calendar {
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+.scroll {
+    aspect-ratio: 1;
+    border-radius: 100%;
+}

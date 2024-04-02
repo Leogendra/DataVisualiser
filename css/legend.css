@@ -1,0 +1,35 @@
+.legende {
+    position: fixed;
+    right: 0;
+    bottom: 0;    
+    width: fit-content;
+    padding: 10px;
+    font-size: 1.3rem;
+    color: black;
+    text-shadow: 1px 1px 1px white;
+}
+
+.data-red {
+    background-color: #ff1f1f;
+}
+
+.data-blue {
+    background-color: #57a8ff;
+}
+
+.data-green {
+    background-color: #00b300;
+}
+
+.data-orange {
+    background-color: #ffb22e;
+}
+
+.data-purple {
+    background-color: #ce47ff;
+}
+
+.margin {
+    width: 100%;
+    height: 200px;
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link href="css/calendar.css" rel="stylesheet" type="text/css" />
+    <link href="css/header.css" rel="stylesheet" type="text/css" />
+    <link href="css/legend.css" rel="stylesheet" type="text/css" />
+    <link href="css/stats.css" rel="stylesheet" type="text/css" />
+    <!-- <link href="css/slider.css" rel="stylesheet" type="text/css" /> -->
+    <link rel="icon" href="assets/icon.png" type="image/png" />
+    <title>DataVisualiser</title>
+</head>
+
+<body>
+    <div class="title">DataVisualiser</div>
+
+    <div class="header">
+        <div class="data-choices">
+        </div>
+        <div class="div-buttons">
+            <button class="scroll up" onClick="scroll_up()">
+                <span class="material-symbols-outlined">arrow_upward</span>
+            </button>
+            <button class="refresh-calendar" onClick="refresh_calendar()">Refresh Calendar</button>
+            <button class="scroll down" onClick="scroll_down()">
+                <span class="material-symbols-outlined">arrow_downward</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="container">
+        <div class="calendar">
+            <div class="calendar-options">
+            <button class="expand-all" onClick="expand_all()">Tout déplier</button>
+            <button class="reduce-all" onClick="reduce_all()">Tout réduire</button>
+            </div>
+            <div class="calendar-body"></div>
+        </div>
+        <div class="stats">
+            <div class="options"></div>
+            <div class="frequency-week"></div>
+            <div class="frequency-month"></div>
+            <div class="correlations-month"></div>
+        </div>
+    </div>
+
+    <div class="legende"></div>
+    
+    <div class="margin"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="data/data.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/stats.js"></script>
+    <script src="js/display.js"></script>
+</body>
+
+</html>
