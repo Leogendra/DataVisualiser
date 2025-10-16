@@ -128,7 +128,7 @@ def parse_tally(file_path):
         counter_name = row["Counter Name"]
         if row["Count Action"] == "1":
             timestamp = row['Timestamp']
-            # date au format '2022-07-04'
+            # date with format "YYYY-MM-DD"
             date = timestamp.split(' ')[0]
             tally.append(date)
 
@@ -200,31 +200,55 @@ def clean_data(data, to_clean=[]):
 
 
 def write_parsed_data(data, file_path, write_keys=False):
-
-    # Export data to js file
-    with open(file_path, 'w', encoding='utf-8') as f:
-        f.write("var parsedData = ")
-        f.write(json.dumps(data, ensure_ascii=False, indent=4))
-
-    if write_keys:
-        with open("data/keys.txt", 'w', encoding='utf-8') as f:
-            f.write(', '.join(data.keys()))
-
     if len(data) > 0:
+        # Export data to js file
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write("var parsedData = ")
+            f.write(json.dumps(data, ensure_ascii=False, indent=4))
+
+        if write_keys:
+            with open("data/keys.txt", 'w', encoding='utf-8') as f:
+                f.write(', '.join(data.keys()))
         print(f"Data exported to {file_path}")
     else:
         print("No data found")
 
 
+def export_to_pixel_data(data, file_path):
+    pixels = {}
+
+    for habit, dates in data.items():
+        for date in dates:
+            if (date not in pixels):
+                pixels[date] = {
+                    "date": date,
+                    "type": "Mood",
+                    "scores": [3], # todo
+                    "notes": "",
+                    "tags": [
+                        {
+                            "type": "Tracking",
+                            "entries": []
+                        }
+                    ]
+                }
+            pixels[date]["tags"][0]["entries"].append(habit)
+
+    pixels_list = list(pixels.values())
+
+    if (len(pixels_list) > 0):
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(json.dumps(pixels_list, ensure_ascii=False, indent=4))
+        print(f"Data converted to {file_path}")
 
 
-def auto_parse_all():
+def auto_parse_all(dataDirectory):
 
     check_if_files_exists()
 
     # Parse merge_words
     merge_words = {}
-    with open("data/merge_words.txt", 'r', encoding='utf-8') as f:
+    with open(f"{dataDirectory}/merge_words.txt", 'r', encoding='utf-8') as f:
         for line in f:
             key, values = line.strip().split(":")
             splitted_values = values.split(";")
@@ -238,7 +262,7 @@ def auto_parse_all():
 
     # Parse pixels_words
     pixels_words = []
-    with open("data/pixels_words.txt", 'r', encoding='utf-8') as f:
+    with open(f"{dataDirectory}/pixels_words.txt", 'r', encoding='utf-8') as f:
         for line in f:
             parsed_phrases = parse_sentence(line.strip())
             for word in parsed_phrases:
@@ -246,22 +270,27 @@ def auto_parse_all():
 
 
     parsed_data = []
-    for file in os.listdir("data"):
-        if file.startswith("counter_export"):
-            data = parse_tally(f"data/{file}")
-            parsed_data.append(data)
-        elif file.startswith("Checkmarks"):
-            data = parse_habits(f"data/{file}")
-            parsed_data.append(data)
-        elif file.startswith("PIXELS"):
-            data = parse_pixels(f"data/{file}", pixels_words)
-            parsed_data.append(data)
+    for root, _, files in os.walk(dataDirectory):
+        for file in files:
+            fullFilePath = os.path.join(root, file)
+            if file.startswith("counter_export"):
+                data = parse_tally(fullFilePath)
+                parsed_data.append(data)
+            elif file.startswith("Checkmarks"):
+                data = parse_habits(fullFilePath)
+                parsed_data.append(data)
+            elif file.startswith("PIXELS"):
+                data = parse_pixels(fullFilePath, pixels_words)
+                parsed_data.append(data)
 
     data = merge_data(merge_words, parsed_data)
-    write_parsed_data(data, "data/data.js")
+    write_parsed_data(data, f"{dataDirectory}/data.js")
+    export_to_pixel_data(data, f"{dataDirectory}/habits_pixels.json")
 
 
 
 
 if __name__ == "__main__":
-    auto_parse_all()
+
+    dataRootDirectory = "data"
+    auto_parse_all(dataRootDirectory)
